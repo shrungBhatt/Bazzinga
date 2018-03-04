@@ -3,21 +3,16 @@ package com.projects.shrungbhatt.filetransfer;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import com.projects.shrungbhatt.filetransfer.transfer.TransferConstants;
-
+import android.widget.Button;
+import android.widget.ImageView;
 
 import com.projects.shrungbhatt.filetransfer.db.DBAdapter;
 import com.projects.shrungbhatt.filetransfer.notification.NotificationToast;
-import com.projects.shrungbhatt.filetransfer.utils.ConnectionUtils;
 import com.projects.shrungbhatt.filetransfer.utils.Utility;
 
 import java.net.InetAddress;
@@ -27,24 +22,26 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class HomeScreen extends AppCompatActivity {
 
     public static final String WRITE_PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE;
     public static final int WRITE_PERM_REQ_CODE = 19;
+    @BindView(R.id.btn_home_wifi_direct)
+    Button mBtnHomeWifiDirect;
+    @BindView(R.id.home_screen_image_view)
+    ImageView mHomeScreenImageView;
 
-    EditText etUsername;
-    TextView tvPort;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
-        etUsername = (EditText) findViewById(R.id.et_home_player_name);
-        tvPort = (TextView) findViewById(R.id.tv_port_info);
+        ButterKnife.bind(this);
 
-        String userNameHint = getString(R.string.enter_name_hint) + "(default = " + Build
-                .MANUFACTURER + ")";
-        etUsername.setHint(userNameHint);
 
         checkWritePermission();
         printInterfaces();
@@ -64,8 +61,7 @@ public class HomeScreen extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         DBAdapter.getInstance(HomeScreen.this).clearDatabase();
-        tvPort.setText(String.format(getString(R.string.port_info), ConnectionUtils.getPort
-                (HomeScreen.this)));
+
     }
 
     private void printInterfaces() {
@@ -92,12 +88,6 @@ public class HomeScreen extends AppCompatActivity {
         }
     }
 
-    private void saveUsername() {
-        String userName = etUsername.getText().toString();
-        if (userName != null && userName.trim().length() > 0) {
-            Utility.saveString(HomeScreen.this, TransferConstants.KEY_USER_NAME, userName);
-        }
-    }
 
     private void checkWritePermission() {
         boolean isGranted = Utility.checkPermission(WRITE_PERMISSION, this);
@@ -107,10 +97,8 @@ public class HomeScreen extends AppCompatActivity {
     }
 
 
-
-    public void startWiFiDirect(View v) {
+    public void startWiFiDirect() {
         if (Utility.isWiFiEnabled(HomeScreen.this)) {
-            saveUsername();
             Intent wifiDirectIntent = new Intent(HomeScreen.this, LocalDashWiFiDirect.class);
             startActivity(wifiDirectIntent);
             finish();
@@ -121,4 +109,8 @@ public class HomeScreen extends AppCompatActivity {
     }
 
 
+    @OnClick(R.id.btn_home_wifi_direct)
+    public void onViewClicked() {
+        startWiFiDirect();
+    }
 }

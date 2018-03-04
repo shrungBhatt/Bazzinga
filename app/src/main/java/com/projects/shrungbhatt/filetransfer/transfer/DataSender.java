@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.projects.shrungbhatt.filetransfer.model.ChatDTO;
 import com.projects.shrungbhatt.filetransfer.model.DeviceDTO;
 import com.projects.shrungbhatt.filetransfer.utils.ConnectionUtils;
 import com.projects.shrungbhatt.filetransfer.utils.Utility;
@@ -83,34 +82,9 @@ public class DataSender {
         sendData(context, destIP, destPort, transferData);
     }
 
-    public static void sendChatRequest(Context context, String destIP, int destPort) {
-        DeviceDTO currentDevice = new DeviceDTO();
-        currentDevice.setPort(ConnectionUtils.getPort(context));
-        String playerName = Utility.getString(context, TransferConstants.KEY_USER_NAME);
-        if (playerName != null) {
-            currentDevice.setPlayerName(playerName);
-        }
-        currentDevice.setIp(Utility.getString(context, TransferConstants.KEY_MY_IP));
-        ITransferable transferData = TransferModelGenerator.generateChatRequestModel(currentDevice);
-        sendData(context, destIP, destPort, transferData);
-    }
 
-    public static void sendChatResponse(Context context, String destIP, int destPort, boolean
-            isAccepted) {
-        DeviceDTO currentDevice = new DeviceDTO();
-        currentDevice.setPort(ConnectionUtils.getPort(context));
-        String playerName = Utility.getString(context, TransferConstants.KEY_USER_NAME);
-        if (playerName != null) {
-            currentDevice.setPlayerName(playerName);
-        }
-        currentDevice.setIp(Utility.getString(context, TransferConstants.KEY_MY_IP));
-        ITransferable transferData = TransferModelGenerator.generateChatResponseModel
-                (currentDevice, isAccepted);
-        sendData(context, destIP, destPort, transferData);
-    }
 
-    public static void sendChatInfo(Context context, String destIP, int destPort, ChatDTO chat) {
-        ITransferable transferableData = TransferModelGenerator.generateChatTransferModel(chat);
-        sendData(context, destIP, destPort, transferableData);
-    }
+
+
+
 }

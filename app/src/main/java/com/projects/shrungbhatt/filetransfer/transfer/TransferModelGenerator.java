@@ -1,7 +1,6 @@
 package com.projects.shrungbhatt.filetransfer.transfer;
 
 import com.projects.shrungbhatt.filetransfer.model.DeviceDTO;
-import com.projects.shrungbhatt.filetransfer.model.ChatDTO;
 
 
 public class TransferModelGenerator {
@@ -30,28 +29,7 @@ public class TransferModelGenerator {
         return transferModel;
     }
 
-    public static ITransferable generateChatTransferModel(ChatDTO chat) {
-        //All chats are type response as no further response is needed as of now
-        TransferModel transferModel = new TransferModel(TransferConstants.CHAT_DATA,
-                TransferConstants.TYPE_RESPONSE,
-                chat.toString());
-        return transferModel;
-    }
 
-    public static ITransferable generateChatRequestModel(DeviceDTO device) {
-        TransferModel transferModel = new TransferModel(TransferConstants.CHAT_REQUEST_SENT,
-                TransferConstants.TYPE_REQUEST, device.toString());
-        return transferModel;
-    }
-
-    public static ITransferable generateChatResponseModel(DeviceDTO device, boolean
-            isChatRequestAccepted) {
-        int reqCode = isChatRequestAccepted ? TransferConstants.CHAT_REQUEST_ACCEPTED :
-                TransferConstants.CHAT_REQUEST_REJECTED;
-        TransferModel transferModel = new TransferModel(reqCode,
-                TransferConstants.TYPE_RESPONSE, device.toString());
-        return transferModel;
-    }
 
     static class TransferModel implements ITransferable {
 

@@ -94,7 +94,7 @@ public class ConnectionListener extends Thread {
             //If control comes here that means the byte array sent is not the transfer object
             // that was expected. Processing it as a file (JPEG)
             final File f = new File(Environment.getExternalStorageDirectory() + "/"
-                    + "/localdash/" + System.currentTimeMillis() + ".jpg");
+                    + "/localdash/" + System.currentTimeMillis() + ".mp4");
 
             File dirs = new File(f.getParent());
             if (!dirs.exists()) {
@@ -108,7 +108,7 @@ public class ConnectionListener extends Thread {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setDataAndType(Uri.parse("file://" + f.getAbsolutePath()), "image/*");
+                intent.setDataAndType(Uri.parse("file://" + f.getAbsolutePath()), "video/*");
                 mContext.startActivity(intent);
             }
         } catch (IOException e) {

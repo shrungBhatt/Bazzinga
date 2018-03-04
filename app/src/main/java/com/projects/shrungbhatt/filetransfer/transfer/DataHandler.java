@@ -84,18 +84,6 @@ public class DataHandler {
         broadcaster.sendBroadcast(intent);
     }
 
-    private void processChatRequestResponse(boolean isRequestAccepted) {
-        String chatResponderDeviceJSON = data.getData();
-        DeviceDTO chatResponderDevice = DeviceDTO.fromJSON(chatResponderDeviceJSON);
-        chatResponderDevice.setIp(senderIP);
-
-        Intent intent = new Intent(CHAT_RESPONSE_RECEIVED);
-        intent.putExtra(KEY_CHAT_REQUEST, chatResponderDevice);
-        intent.putExtra(KEY_IS_CHAT_REQUEST_ACCEPTED, isRequestAccepted);
-        broadcaster.sendBroadcast(intent);
-    }
-
-
 
     private void processPeerDeviceInfo() {
         String deviceJSON = data.getData();

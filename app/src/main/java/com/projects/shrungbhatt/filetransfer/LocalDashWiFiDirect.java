@@ -73,8 +73,6 @@ public class LocalDashWiFiDirect extends AppCompatActivity implements PeerListFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.local_dash_wd);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         initialize();
     }
@@ -252,6 +250,12 @@ public class LocalDashWiFiDirect extends AppCompatActivity implements PeerListFr
                             selectedDevice.getPort(), imageUri);
                 }
                 break;
+            case DialogUtils.CODE_PICK_FILE:
+                if(resultCode == RESULT_OK){
+                    Uri fileUri = data.getData();
+                    DataSender.sendFile(this,selectedDevice.getIp(),
+                            selectedDevice.getPort(),fileUri);
+                }
             default:
                 break;
         }
