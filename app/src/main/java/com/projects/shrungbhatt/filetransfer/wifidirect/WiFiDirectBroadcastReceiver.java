@@ -25,7 +25,8 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.util.Log;
 
-import com.projects.shrungbhatt.filetransfer.LocalDashWiFiDirect;
+import com.projects.shrungbhatt.filetransfer.Activity_WifiDirect;
+//import com.projects.shrungbhatt.filetransfer.LocalDashWiFiDirect;
 import com.projects.shrungbhatt.filetransfer.utils.Utility;
 
 /**
@@ -35,7 +36,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
     private WifiP2pManager manager;
     private Channel channel;
-    private LocalDashWiFiDirect activity;
+    private Activity_WifiDirect activity;
 
     private static final String TAG = "WiFiDirectReceiver";
 
@@ -45,7 +46,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
      * @param activity activity associated with the receiver
      */
     public WiFiDirectBroadcastReceiver(WifiP2pManager manager, Channel channel,
-                                       LocalDashWiFiDirect activity) {
+                                       Activity_WifiDirect activity) {
         super();
         this.manager = manager;
         this.channel = channel;

@@ -99,7 +99,7 @@ public class HomeScreen extends AppCompatActivity {
 
     public void startWiFiDirect() {
         if (Utility.isWiFiEnabled(HomeScreen.this)) {
-            Intent wifiDirectIntent = new Intent(HomeScreen.this, LocalDashWiFiDirect.class);
+            Intent wifiDirectIntent = new Intent(HomeScreen.this, Activity_WifiDirect.class);
             startActivity(wifiDirectIntent);
             finish();
         } else {

@@ -6,8 +6,9 @@ import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.projects.shrungbhatt.filetransfer.Activity_WifiDirect;
 import com.projects.shrungbhatt.filetransfer.model.DeviceDTO;
-import com.projects.shrungbhatt.filetransfer.LocalDashWiFiDirect;
+//import com.projects.shrungbhatt.filetransfer.LocalDashWiFiDirect;
 import com.projects.shrungbhatt.filetransfer.db.DBAdapter;
 
 
@@ -52,8 +53,8 @@ public class DataHandler {
                 break;
             case TransferConstants.CLIENT_DATA_WD:
                 processPeerDeviceInfo();
-                Intent intent = new Intent(LocalDashWiFiDirect.FIRST_DEVICE_CONNECTED);
-                intent.putExtra(LocalDashWiFiDirect.KEY_FIRST_DEVICE_IP, senderIP);
+                Intent intent = new Intent(Activity_WifiDirect.FIRST_DEVICE_CONNECTED);
+                intent.putExtra(Activity_WifiDirect.KEY_FIRST_DEVICE_IP, senderIP);
                 broadcaster.sendBroadcast(intent);
                 break;
             case TransferConstants.CHAT_REQUEST_SENT:

@@ -41,6 +41,9 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
+        <activity android:name=".Activity_WifiDirect"
+            android:screenOrientation="portrait"/>
+
         <service
             android:name="com.projects.shrungbhatt.filetransfer.transfer.DataTransferService"
             android:enabled="true"/>
