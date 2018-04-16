@@ -2,13 +2,16 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
->
+    android:layout_height="match_parent">
+
+
 
     <ImageView
         android:id="@+id/home_screen_image_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/ftp_illus_2"/>
 
     <Button
         android:id="@+id/btn_home_wifi_direct"
@@ -22,7 +25,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="@dimen/margin_big"
-        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="@color/colorAccent"
         android:textColor="@android:color/white"
         android:layout_alignParentBottom="true"
         android:text="@string/txt_wifi_direct"/>
