@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Button xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          android:id="@+id/device_name"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="@dimen/fab_margin"
-          android:backgroundTint="@color/lightGray"
-          android:gravity="center"
-          android:padding="@dimen/margin_small"
-          android:textSize="20sp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/device_name"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/fab_margin"
+    android:backgroundTint="@color/lightGray"
+    android:drawableStart="@drawable/mobile"
+    android:gravity="center"
+    android:padding="12dp"
+    android:textSize="20sp">
 
 </Button>

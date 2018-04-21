@@ -67,12 +67,49 @@ public class Activity_WifiDirect extends AppCompatActivity implements PeerListFr
     TextView mNoDevicesTv;
     @BindView(R.id.btn_home_wifi_direct)
     Button mBtnHomeWifiDirect;
+    boolean isConnectionInfoSent = false;
     private boolean isWifiP2pEnabled = false;
-
     private boolean isWDConnected = false;
-
+    //    private ConnectionListener connListener;
     private AppController appController;
-//    private ConnectionListener connListener;
+    private BroadcastReceiver localDashReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case FIRST_DEVICE_CONNECTED:
+                    appController.restartConnectionListenerWith(ConnectionUtils.getPort(Activity_WifiDirect.this));
+
+                    String senderIP = intent.getStringExtra(KEY_FIRST_DEVICE_IP);
+                    int port = DBAdapter.getInstance(Activity_WifiDirect.this).getDevice
+                            (senderIP).getPort();
+                    DataSender.sendCurrentDeviceData(Activity_WifiDirect.this, senderIP, port, true);
+                    isWDConnected = true;
+                    break;
+                case DataHandler.DEVICE_LIST_CHANGED:
+                    ArrayList<DeviceDTO> devices = DBAdapter.getInstance(Activity_WifiDirect.this)
+                            .getDeviceList();
+                    int peerCount = (devices == null) ? 0 : devices.size();
+                    if (peerCount > 0) {
+
+                        /*deviceListFragment = new PeerListFragment();
+                        Bundle args = new Bundle();
+                        args.putSerializable(PeerListFragment.ARG_DEVICE_LIST, devices);
+                        deviceListFragment.setArguments(args);
+
+                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                        ft.replace(R.id.deviceListHolder, deviceListFragment);
+                        ft.setTransition(FragmentTransaction.TRANSIT_NONE);
+                        ft.commit();*/
+                        populateRecyclerView(devices);
+                    }
+                    setToolBarTitle(peerCount);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+    private DeviceDTO selectedDevice;
 
     /**
      * @param isWifiP2pEnabled the isWifiP2pEnabled to set
@@ -89,6 +126,7 @@ public class Activity_WifiDirect extends AppCompatActivity implements PeerListFr
 
 
         mDevicesListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         initialize();
     }
@@ -139,7 +177,7 @@ public class Activity_WifiDirect extends AppCompatActivity implements PeerListFr
     public void findPeers() {
 
         if (!isWDConnected) {
-            Toast.makeText(this,"Finding peers",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Finding peers", Toast.LENGTH_SHORT).show();
             wifiP2pManager.discoverPeers(wifip2pChannel, new WifiP2pManager.ActionListener() {
                 @Override
                 public void onSuccess() {
@@ -210,46 +248,6 @@ public class Activity_WifiDirect extends AppCompatActivity implements PeerListFr
         super.onDestroy();
     }
 
-    private BroadcastReceiver localDashReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case FIRST_DEVICE_CONNECTED:
-                    appController.restartConnectionListenerWith(ConnectionUtils.getPort(Activity_WifiDirect.this));
-
-                    String senderIP = intent.getStringExtra(KEY_FIRST_DEVICE_IP);
-                    int port = DBAdapter.getInstance(Activity_WifiDirect.this).getDevice
-                            (senderIP).getPort();
-                    DataSender.sendCurrentDeviceData(Activity_WifiDirect.this, senderIP, port, true);
-                    isWDConnected = true;
-                    break;
-                case DataHandler.DEVICE_LIST_CHANGED:
-                    ArrayList<DeviceDTO> devices = DBAdapter.getInstance(Activity_WifiDirect.this)
-                            .getDeviceList();
-                    int peerCount = (devices == null) ? 0 : devices.size();
-                    if (peerCount > 0) {
-
-                        /*deviceListFragment = new PeerListFragment();
-                        Bundle args = new Bundle();
-                        args.putSerializable(PeerListFragment.ARG_DEVICE_LIST, devices);
-                        deviceListFragment.setArguments(args);
-
-                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                        ft.replace(R.id.deviceListHolder, deviceListFragment);
-                        ft.setTransition(FragmentTransaction.TRANSIT_NONE);
-                        ft.commit();*/
-                        populateRecyclerView(devices);
-                    }
-                    setToolBarTitle(peerCount);
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-
-    private DeviceDTO selectedDevice;
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -287,8 +285,6 @@ public class Activity_WifiDirect extends AppCompatActivity implements PeerListFr
             Utility.requestPermission(WRITE_PERMISSION, WRITE_PERM_REQ_CODE, this);
         }
     }
-
-    boolean isConnectionInfoSent = false;
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
@@ -377,8 +373,17 @@ public class Activity_WifiDirect extends AppCompatActivity implements PeerListFr
         findPeers();
     }
 
-    private void populateRecyclerView(ArrayList<DeviceDTO> deviceDTOS){
-        mDevicesListRecyclerView.setAdapter(new Adapter_DeviceListAdapter(Activity_WifiDirect.this,
-                deviceDTOS,this));
+    private void populateRecyclerView(ArrayList<DeviceDTO> deviceDTOS) {
+        if (deviceDTOS != null) {
+            if (deviceDTOS.size() != 0) {
+                mDevicesListRecyclerView.setAdapter(new Adapter_DeviceListAdapter(Activity_WifiDirect.this,
+                        deviceDTOS, this));
+                mDevicesListRecyclerView.setVisibility(View.VISIBLE);
+                mNoDevicesTv.setVisibility(View.GONE);
+            } else {
+                mDevicesListRecyclerView.setVisibility(View.GONE);
+                mNoDevicesTv.setVisibility(View.VISIBLE);
+            }
+        }
     }
 }

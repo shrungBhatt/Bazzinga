@@ -69,6 +69,8 @@ public class ConnectionListener extends Thread {
         try {
             byte[] input = Utility.getInputStreamByteArray(inputStream);
 
+            String decodedData = new String(input,"UTF-8");
+
             ObjectInput oin = null;
             try {
                 oin = new ObjectInputStream(new ByteArrayInputStream(input));

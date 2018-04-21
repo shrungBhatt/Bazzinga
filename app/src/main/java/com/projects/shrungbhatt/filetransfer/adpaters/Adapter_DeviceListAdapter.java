@@ -42,7 +42,9 @@ public class Adapter_DeviceListAdapter extends RecyclerView.Adapter<Adapter_Devi
     @Override
     public void onBindViewHolder(@NonNull DeviceViewHolder holder, final int position) {
 
-        holder.mDeviceButton.setText(mDeviceDTOS.get(position).getDeviceName());
+        String deviceName = mDeviceDTOS.get(position).getPlayerName()
+                + "-" + mDeviceDTOS.get(position).getDeviceName();
+        holder.mDeviceButton.setText(deviceName);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
