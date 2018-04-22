@@ -167,7 +167,9 @@ public class Activity_WifiDirect extends AppCompatActivity implements PeerListFr
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_history) {
+            startActivity(new Intent(
+                    this, Activity_History.class));
             return true;
         }
 

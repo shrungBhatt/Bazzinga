@@ -56,7 +56,8 @@ public class DataTransferService extends IntentService {
                 .setContentTitle("File Transfer")
                 .setContentText("Sending File... please wait")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setAutoCancel(true)
+                .setAutoCancel(false)
+                .setOngoing(true)
                 .build();
 
         mNotificationManagerCompat =

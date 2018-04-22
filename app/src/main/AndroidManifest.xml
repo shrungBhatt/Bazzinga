@@ -34,14 +34,17 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
+        <!--<activity
             android:name="com.projects.shrungbhatt.filetransfer.LocalDashWiFiDirect"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+        </activity>-->
 
         <activity android:name=".Activity_WifiDirect"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".Activity_History"
             android:screenOrientation="portrait"/>
 
         <service
