@@ -7,7 +7,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.projects.shrungbhatt.filetransfer.adpaters.Adapter_HistoryViewPager;
-import com.projects.shrungbhatt.filetransfer.utils.Utility;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -413,30 +413,7 @@ public class Activity_WifiDirect extends AppCompatActivity implements PeerListFr
         @Override
         protected Void doInBackground(Uri... uris) {
 
-            /*BufferedInputStream bis = null;
-            BufferedOutputStream bos = null;
 
-            final String path = Environment.getExternalStorageDirectory() + "/"
-                    + "localdash/" + "sent/"+System.currentTimeMillis() + ".mp4";
-
-            try {
-                bis = new BufferedInputStream(new FileInputStream(Arrays.toString(uris)));
-                bos = new BufferedOutputStream(new FileOutputStream(path, false));
-                byte[] buf = new byte[1024];
-                bis.read(buf);
-                do {
-                    bos.write(buf);
-                } while(bis.read(buf) != -1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (bis != null) bis.close();
-                    if (bos != null) bos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }*/
 
 
             final File file = new File(Environment.getExternalStorageDirectory() + "/"

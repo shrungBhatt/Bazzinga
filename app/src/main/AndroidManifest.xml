@@ -45,7 +45,8 @@
             android:screenOrientation="portrait"/>
 
         <activity android:name=".Activity_History"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:parentActivityName=".HomeScreen"/>
 
         <service
             android:name="com.projects.shrungbhatt.filetransfer.transfer.DataTransferService"
