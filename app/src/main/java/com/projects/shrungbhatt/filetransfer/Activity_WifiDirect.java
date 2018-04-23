@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
@@ -13,7 +14,9 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
@@ -21,6 +24,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,8 +44,17 @@ import com.projects.shrungbhatt.filetransfer.utils.DialogUtils;
 import com.projects.shrungbhatt.filetransfer.utils.Utility;
 import com.projects.shrungbhatt.filetransfer.wifidirect.WiFiDirectBroadcastReceiver;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -254,12 +267,15 @@ public class Activity_WifiDirect extends AppCompatActivity implements PeerListFr
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        SaveImage saveImage = new SaveImage();
+
         switch (requestCode) {
             case DialogUtils.CODE_PICK_IMAGE:
                 if (resultCode == RESULT_OK) {
                     Uri imageUri = data.getData();
                     DataSender.sendFile(Activity_WifiDirect.this, selectedDevice.getIp(),
                             selectedDevice.getPort(), imageUri);
+                    saveImage.execute(imageUri);
                 }
                 break;
             case DialogUtils.CODE_PICK_FILE:
@@ -267,6 +283,7 @@ public class Activity_WifiDirect extends AppCompatActivity implements PeerListFr
                     Uri fileUri = data.getData();
                     DataSender.sendFile(this, selectedDevice.getIp(),
                             selectedDevice.getPort(), fileUri);
+                    saveImage.execute(fileUri);
                 }
             default:
                 break;
@@ -386,6 +403,83 @@ public class Activity_WifiDirect extends AppCompatActivity implements PeerListFr
                 mDevicesListRecyclerView.setVisibility(View.GONE);
                 mNoDevicesTv.setVisibility(View.VISIBLE);
             }
+        }
+    }
+
+
+    private class SaveImage extends AsyncTask<Uri,Void,Void>{
+
+
+        @Override
+        protected Void doInBackground(Uri... uris) {
+
+            /*BufferedInputStream bis = null;
+            BufferedOutputStream bos = null;
+
+            final String path = Environment.getExternalStorageDirectory() + "/"
+                    + "localdash/" + "sent/"+System.currentTimeMillis() + ".mp4";
+
+            try {
+                bis = new BufferedInputStream(new FileInputStream(Arrays.toString(uris)));
+                bos = new BufferedOutputStream(new FileOutputStream(path, false));
+                byte[] buf = new byte[1024];
+                bis.read(buf);
+                do {
+                    bos.write(buf);
+                } while(bis.read(buf) != -1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (bis != null) bis.close();
+                    if (bos != null) bos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }*/
+
+
+            final File file = new File(Environment.getExternalStorageDirectory() + "/"
+                    + "/localdash/" + "sent/"+System.currentTimeMillis() + ".mp4");
+
+            File dirs = new File(file.getParent());
+            if (!dirs.exists()) {
+                boolean dirsSuccess = dirs.mkdirs();
+            }
+            try {
+                boolean fileCreationSuccess = file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            final int chunkSize = 1024;  // We'll read in one kB at a time
+            byte[] imageData = new byte[chunkSize];
+
+            try {
+                InputStream in = getContentResolver().openInputStream(uris[0]);
+                OutputStream out = new FileOutputStream(file);  // I'm assuming you already have the File object for where you're writing to
+
+                int bytesRead;
+                while ((bytesRead = in.read(imageData)) > 0) {
+                    out.write(Arrays.copyOfRange(imageData, 0, Math.max(0, bytesRead)));
+                }
+
+                in.close();
+
+                out.close();
+
+
+            } catch (Exception ex) {
+                Log.e("Something went wrong.", ex.toString());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            Toast.makeText(getApplicationContext(),"Image saved",Toast.LENGTH_SHORT).show();
         }
     }
 }

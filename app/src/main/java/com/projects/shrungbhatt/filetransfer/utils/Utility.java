@@ -4,16 +4,22 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -23,6 +29,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -250,6 +257,37 @@ public class Utility {
         SharedPreferences.Editor prefsEditor = cxt.getSharedPreferences("kkd", Context
                 .MODE_PRIVATE).edit();
         prefsEditor.clear().commit();
+    }
+
+
+    public static List<String> getFiles(String folder) {
+        List<String> mFiles = new ArrayList<>();
+        String path = Environment.getExternalStorageDirectory() + "/"
+                + "/localdash/" + folder + "/";
+        Log.d("Files", "Path: " + path);
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        Log.d("Files", "Size: " + files.length);
+        for (File file : files) {
+            mFiles.add(file.getAbsolutePath());
+            Log.d("Files", "FileName:" + file.getName());
+
+        }
+
+        return mFiles;
+
+    }
+
+    public static Bitmap getThumbnail(String path) {
+        Bitmap bmThumbnail;
+        bmThumbnail = ThumbnailUtils.createVideoThumbnail(path, MediaStore.Video.Thumbnails.MICRO_KIND);
+
+        return bmThumbnail;
+    }
+
+    public static Uri getUri(String path) {
+
+        return Uri.parse(String.valueOf(new File(path)));
     }
 
 }
