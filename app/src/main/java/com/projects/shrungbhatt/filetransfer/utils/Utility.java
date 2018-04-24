@@ -267,14 +267,18 @@ public class Utility {
         Log.d("Files", "Path: " + path);
         File directory = new File(path);
         File[] files = directory.listFiles();
-        Log.d("Files", "Size: " + files.length);
-        for (File file : files) {
-            mFiles.add(file.getAbsolutePath());
-            Log.d("Files", "FileName:" + file.getName());
+        if (files != null) {
+            Log.d("Files", "Size: " + files.length);
+            for (File file : files) {
+                mFiles.add(file.getAbsolutePath());
+                Log.d("Files", "FileName:" + file.getName());
 
+            }
+            return mFiles;
+        } else {
+            return mFiles;
         }
 
-        return mFiles;
 
     }
 
